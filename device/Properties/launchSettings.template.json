@@ -3,13 +3,13 @@
     "hub": {
       "commandName": "Project",
       "environmentVariables": {
-        "CS": "HostName=rido.azure-devices.net;DeviceId=pnpone;SharedAccessKey="
+        "CS": "HostName=;DeviceId=;SharedAccessKey="
       }
     },
     "central": {
       "commandName": "Project",
       "environmentVariables": {
-        "CS": "HostName=iotc-4956be74-8842-4d17-bc93-96801e98f284.azure-devices.net;DeviceId=myTestDevice1;SharedAccessKey="
+        "CS": "HostName=;DeviceId=;SharedAccessKey="
       }
     }
   }
