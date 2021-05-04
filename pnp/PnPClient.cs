@@ -12,86 +12,15 @@ using System.Threading.Tasks;
 namespace PnPConvention
 {
     public delegate void OnDesiredPropertyFoundCallback(TwinCollection newValue);
-    public sealed class PnPClient
+    public partial class PnPClient 
     {
-        static readonly Dictionary<string, OnDesiredPropertyFoundCallback> desiredPropertyCallbacks = new Dictionary<string, OnDesiredPropertyFoundCallback>();
+        private DeviceClient deviceClient;
+        readonly Dictionary<string, OnDesiredPropertyFoundCallback> desiredPropertyCallbacks = new Dictionary<string, OnDesiredPropertyFoundCallback>();
 
-        static PnPClient() { }
-        private PnPClient() { }
-        private static readonly PnPClient instance = new PnPClient();
-        private static IPnPDeviceClient deviceClient;
-        public static PnPClient CreateFromDeviceClient(IPnPDeviceClient client)
+        public PnPClient(DeviceClient client)
         {
             deviceClient = client;
             deviceClient.SetDesiredPropertyUpdateCallbackAsync(DesiredPropertyUpdateCallback, deviceClient);
-            return instance;
-        }
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        public static PnPClient CreateFromConnectionStringAndModelId(string connectionString, string modelId)
-        {
-            deviceClient = new PnPDeviceClient(DeviceClient.CreateFromConnectionString(connectionString,
-                                                        TransportType.Mqtt,
-                                                        new ClientOptions() { ModelId = modelId }));
-
-            deviceClient.SetDesiredPropertyUpdateCallbackAsync(DesiredPropertyUpdateCallback, deviceClient);
-            return instance;
-        }
-
-        public static async Task<PnPClient> CreateFromDPSSasAndModelIdAsync(string scopeId, string deviceId, string sas, string modelId, ILogger logger)
-        {
-            var dc = await ProvisionDeviceWithSasKeyAsync(scopeId, deviceId, sas, modelId, logger);
-            deviceClient = new PnPDeviceClient(dc);
-            await deviceClient.SetDesiredPropertyUpdateCallbackAsync(DesiredPropertyUpdateCallback, deviceClient);
-            return instance;
-        }
-
-        internal static async Task<DeviceClient> ProvisionDeviceWithSasKeyAsync(string scopeId, string deviceId, string deviceKey, string modelId, ILogger log)
-        {
-            using (var transport = new ProvisioningTransportHandlerMqtt())
-            {
-                using (var security = new SecurityProviderSymmetricKey(deviceId, deviceKey, null))
-                {
-                    DeviceRegistrationResult provResult;
-                    var provClient = ProvisioningDeviceClient.Create("global.azure-devices-provisioning.net", scopeId, security, transport);
-
-                    if (!string.IsNullOrEmpty(modelId))
-                    {
-                        provResult = await provClient.RegisterAsync(GetProvisionPayload(modelId)).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        provResult = await provClient.RegisterAsync().ConfigureAwait(false);
-                    }
-
-                    log.LogInformation($"Provioning Result. Status [{provResult.Status}] SubStatus [{provResult.Substatus}]");
-
-                    if (provResult.Status == ProvisioningRegistrationStatusType.Assigned)
-                    {
-                        log.LogWarning($"Device {provResult.DeviceId} in Hub {provResult.AssignedHub}");
-                        log.LogInformation($"LastRefresh {provResult.LastUpdatedDateTimeUtc} RegistrationId {provResult.RegistrationId}");
-                        var csBuilder = IotHubConnectionStringBuilder.Create(provResult.AssignedHub, new DeviceAuthenticationWithRegistrySymmetricKey(provResult.DeviceId, security.GetPrimaryKey()));
-                        string connectionString = csBuilder.ToString();
-                        return await Task.FromResult(
-                          DeviceClient.CreateFromConnectionString(
-                            connectionString, TransportType.Mqtt,
-                              new ClientOptions() { ModelId = modelId }));
-                    }
-                    else
-                    {
-                        string errorMessage = $"Device not provisioned. Message: {provResult.ErrorMessage}";
-                        log.LogError(errorMessage);
-                        throw new IotHubException(errorMessage);
-                    }
-                }
-            }
-        }
-
-        static ProvisioningRegistrationAdditionalData GetProvisionPayload(string modelId)
-        {
-            return new ProvisioningRegistrationAdditionalData
-            {
-                JsonData = "{ modelId: '" + modelId + "'}"
-            };
         }
 
         public async Task SendTelemetryValueAsync(string serializedTelemetry)
@@ -178,7 +107,7 @@ namespace PnPConvention
         }
 
 
-        private static Task DesiredPropertyUpdateCallback(TwinCollection desiredProperties, object userContext)
+        private Task DesiredPropertyUpdateCallback(TwinCollection desiredProperties, object userContext)
         {
             //desired event should be fired for a single, so first, component.
             var componentName = desiredProperties.EnumerateComponents().FirstOrDefault(); ;
