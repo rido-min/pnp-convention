@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace PnPConvention
 {
     public delegate void OnDesiredPropertyFoundCallback(TwinCollection newValue);
-    public partial class PnPClient
+    public sealed class PnPClient
     {
         private DeviceClient deviceClient;
         readonly Dictionary<string, OnDesiredPropertyFoundCallback> desiredPropertyCallbacks = new Dictionary<string, OnDesiredPropertyFoundCallback>();
