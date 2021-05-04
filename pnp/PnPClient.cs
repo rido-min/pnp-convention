@@ -109,10 +109,13 @@ namespace PnPConvention
 
         private Task DesiredPropertyUpdateCallback(TwinCollection desiredProperties, object userContext)
         {
-            //desired event should be fired for a single, so first, component.
-            var componentName = desiredProperties.EnumerateComponents().FirstOrDefault(); ;
-            var comp = desiredPropertyCallbacks[componentName];
-            comp?.Invoke(desiredProperties);
+            var comps = desiredProperties.EnumerateComponents();
+            foreach (var c in comps)
+            {
+                var ccb = desiredPropertyCallbacks[c];
+                ccb?.Invoke(desiredProperties);
+            }
+            
             return Task.FromResult(0);
         }
 

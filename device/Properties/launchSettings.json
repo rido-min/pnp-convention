@@ -1,9 +1,15 @@
 {
   "profiles": {
-    "device": {
+    "hub": {
       "commandName": "Project",
       "environmentVariables": {
         "CS": "HostName=rido.azure-devices.net;DeviceId=pnpone;SharedAccessKey=tgTSOuNn3rSzrsAZBu/3S3Q0eMqkGhANL74eI4+K9Hg="
+      }
+    },
+    "central": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "CS": "HostName=iotc-4956be74-8842-4d17-bc93-96801e98f284.azure-devices.net;DeviceId=myTestDevice1;SharedAccessKey=ovHPazxXaZc3NGSvV0CBddFP/TcJOEGTO7vC6qUis4Q="
       }
     }
   }
