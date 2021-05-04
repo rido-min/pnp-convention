@@ -163,6 +163,21 @@ namespace PnPConvention
             return desiredPropertyValue;
         }
 
+        public async Task<T> ReadReportedComponentPropertyAsync<T>(string componentName, string propertyName)
+        {
+            var twin = await deviceClient.GetTwinAsync();
+            var desiredPropertyValue = twin.Properties.Reported.GetPropertyValue<T>(componentName, propertyName);
+            return desiredPropertyValue;
+        }
+
+        public async Task<T> ReadReportedPropertyAsync<T>(string propertyName)
+        {
+            var twin = await deviceClient.GetTwinAsync();
+            var desiredPropertyValue = twin.Properties.Reported.GetPropertyValue<T>(propertyName);
+            return desiredPropertyValue;
+        }
+
+
         private static Task DesiredPropertyUpdateCallback(TwinCollection desiredProperties, object userContext)
         {
             //desired event should be fired for a single, so first, component.

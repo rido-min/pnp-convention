@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "device": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "CS": "HostName=rido.azure-devices.net;DeviceId=pnpone;SharedAccessKey=tgTSOuNn3rSzrsAZBu/3S3Q0eMqkGhANL74eI4+K9Hg="
+      }
+    }
+  }
+}

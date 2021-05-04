@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pnp", "pnp\pnp.csproj", "{0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pnp.test", "pnp.test\pnp.test.csproj", "{B31C1FA0-42CB-4202-AC2E-3959628759A9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "device", "device\device.csproj", "{14947554-B2E9-43E0-92D7-15942B86557B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B31C1FA0-42CB-4202-AC2E-3959628759A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B31C1FA0-42CB-4202-AC2E-3959628759A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B31C1FA0-42CB-4202-AC2E-3959628759A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14947554-B2E9-43E0-92D7-15942B86557B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14947554-B2E9-43E0-92D7-15942B86557B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14947554-B2E9-43E0-92D7-15942B86557B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14947554-B2E9-43E0-92D7-15942B86557B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
